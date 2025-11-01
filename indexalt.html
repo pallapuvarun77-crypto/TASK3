@@ -1,0 +1,166 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #4e73df, #1cc88a);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .quiz-container {
+      background: #2e2e2e;
+      padding: 30px;
+      border-radius: 15px;
+      width: 350px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      background: #4e73df;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .answers button:hover {
+      background: #1cc88a;
+    }
+
+    .btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #f6c23e;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #e0b23c;
+    }
+
+    .result {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz Game</h1>
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+      <button class="btn" id="nextBtn">Next</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What does HTML stand for?",
+        options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Transfer Mode Language"],
+        answer: 0
+      },
+      {
+        question: "Which language is used for web apps?",
+        options: ["Python", "PHP", "JavaScript", "All of the above"],
+        answer: 3
+      },
+      {
+        question: "What year was JavaScript launched?",
+        options: ["1996", "1995", "1994", "None of the above"],
+        answer: 1
+      },
+      {
+        question: "CSS stands for?",
+        options: ["Cascading Style Sheets", "Computer Style System", "Creative Style Setup", "Colorful Style Sheet"],
+        answer: 0
+      },
+      {
+        question: "Which company developed Java?",
+        options: ["Microsoft", "Sun Microsystems", "Google", "IBM"],
+        answer: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const nextBtn = document.getElementById("nextBtn");
+    const resultEl = document.getElementById("result");
+    const quiz = document.getElementById("quiz");
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      questionEl.textContent = q.question;
+      answersEl.innerHTML = "";
+      q.options.forEach((option, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.addEventListener("click", () => selectAnswer(index));
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(index) {
+      const correct = quizData[currentQuestion].answer;
+      const buttons = answersEl.querySelectorAll("button");
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correct) btn.style.background = "#1cc88a";
+        else if (i === index) btn.style.background = "#e74a3b";
+      });
+      if (index === correct) score++;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      quiz.style.display = "none";
+      resultEl.innerHTML = `Your Score: ${score} / ${quizData.length}`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
